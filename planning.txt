@@ -1,0 +1,45 @@
+
+a functionality where voter can vote to the given set of condidate
+
+2. models
+3.routes
+
+
+functionality
+
+1.user singup / login
+2.see the list of condidate
+3.one user can vote only one for one condidate one vote
+4.live counts of voting 
+5.user must contain goverment id to login (aadharcard)
+6. there is a admin who can maintain table of  condidate  but cant vote 
+7.user can change details on thier profile
+
+___________________________________________
+
+user Authentication
+
+/singup:POST - create new user
+/login:POST - login to existing account
+
+voting:
+ /condidate: GET - Get all the list of condidate
+ /vote/condidateID : POST - vote for specif person
+
+ 
+ Vote counts:
+ vote/counts : Get - Get the list of condidates sorted by thier counts
+
+
+
+ USER:
+ /profile :GET - Get the all information of user
+ /profile/password  : PUT - change the user's password
+
+ Admin condidate Manegement
+
+ /condidates : POST - create new condidate
+ /condidates/:condidateID : PUT - update the existing condidate
+ /condidates/:condidateID : DELETE - delete the condidate from the list
+
+
