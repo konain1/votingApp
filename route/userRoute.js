@@ -7,26 +7,45 @@ const  {jwtAuthMiddleware,generateToken} = require('../jwt')
 
 
 // person  
-route.post('/signup',async(req,res)=>{
-
+route.post('/signup', async (req, res) => {
     try {
+      const { name, phone, address, password, aadharNumber } = req.body;
+      const data  = req.body;
 
-        const data = req.body;
-        const newPerson = new User(data)
+
+      
+   // Check if admin already exists
+      if(data.role === 'admin'){
+        let adminExists = await User.findOne({role:"admin"})
+        console.log(adminExists)
+        if(adminExists) return res.json({msg:'admin already Exists'})
+      }
 
 
-        const token = generateToken(newPerson.id)
-        await newPerson.save()
-        res.send(token)
-        
+       // Check if user already exists
+       const existingUser = await User.findOne({ $or: [{ phone: phone }, { aadharNumber: aadharNumber }] });
+       if (existingUser) {
+           return res.status(400).json({ msg: "User with this phone number or Aadhar number already exists" });
+       }
+
+      if (!name || !phone || !address || !password || !aadharNumber) {
+        return res.status(400).json({ msg: "All fields are required" });
+      }
+      
+      const newPerson = new User(data);
+      const token = generateToken(newPerson.id);
+      await newPerson.save();
+
+      res.json({ newPerson,token });
+
     } catch (error) {
-        
-        console.log(error)
-        throw error
+      console.error(error);
+      if (error.code === 11000) {
+        return res.status(400).json({ msg: "Phone number or Aadhar number already exists" });
+      }
+      res.status(500).json({ msg: "Internal server error" });
     }
-
-
-})
+  });
 route.post('/login',async(req,res)=>{
     let {phone,password} = req.body;
 
@@ -65,19 +84,22 @@ route.put('/profile/password',jwtAuthMiddleware,async(req,res)=>{
     user.password = newPassword;
     await user.save();
 
-    res.json({msg:'user updated'})
+    res.json({msg:'user password updated'})
    
 })
 
 route.get('/profile',jwtAuthMiddleware,async(req,res)=>{
 
     let userData = req.user;
-    console.log(userData)
+   
+   
+    console.log("userdata "+userData)
 
     try {   
         if(!userData){ res.json({msg:"Unauthorize"})}
 
-        let user = await User.findOne({id:userData})
+        let user = await User.findById(userData)
+        console.log(user)
         res.json({user})
         
     } catch (error) {

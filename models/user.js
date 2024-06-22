@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     phone:{
-        type:Number,
+        type:String,
         required:true,
         unique:true
     },
@@ -21,9 +21,14 @@ const userSchema = new mongoose.Schema({
         required:true
     },
     aadharNumber:{
-        type:Number,
-        required:true,
+        type: String,
+        required: true,
         unique:true
+   
+    },
+    age:{
+        type:Number,
+        required:false
     },
     role:{
         type:String,

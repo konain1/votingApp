@@ -4,7 +4,7 @@ require('dotenv').config()
 const mongoLocalURL = 'mongodb://127.0.0.1:27017/voter'
 const mongoOnlineUrl = process.env.DB_URL
 
-const mongodbURL = mongoose.connect(mongoOnlineUrl)
+const mongodbURL = mongoose.connect(mongoOnlineUrl+"/votingApp")
 
 const db = mongoose.connection;
 db.on('connected',()=>console.log('mongo is connected'))
