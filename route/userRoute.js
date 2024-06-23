@@ -13,7 +13,7 @@ route.post('/signup', async (req, res) => {
       const data  = req.body;
 
 
-      
+
    // Check if admin already exists
       if(data.role === 'admin'){
         let adminExists = await User.findOne({role:"admin"})
@@ -59,7 +59,7 @@ route.post('/login',async(req,res)=>{
  
    const token = generateToken(user.id)
 
-   res.json({token})
+   res.json({user,token})
         
     } catch (error) {
         console.log(error)
